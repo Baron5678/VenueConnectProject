@@ -50,4 +50,5 @@ class Review(models.Model):
 class BookingOrder(models.Model):
     bookingDate = models.DateTimeField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='booking_order')
-
+    # the spec talks about the 'paymentID' attribute, but since the payment processing
+    # has been scrapped, it was skipped
