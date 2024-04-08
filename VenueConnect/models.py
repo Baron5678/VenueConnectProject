@@ -50,6 +50,20 @@ class User(AbstractUser):
     phone_number = models.IntegerField(null=True)
     email_verified = models.BooleanField(default=False)
 
+    @staticmethod
+    def register(username,
+                 password,
+                 first_name,
+                 last_name,
+                 email,
+                 phone_number):
+        return UserManager().create_user(username=username,
+                                         password=password,
+                                         first_name=first_name,
+                                         last_name=last_name,
+                                         email=email,
+                                         phone_number=phone_number)
+
 
 class Venue(models.Model):
     class VenueType(models.TextChoices):
