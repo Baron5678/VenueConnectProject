@@ -47,7 +47,7 @@ class User(AbstractUser):
     # email
 
     # we have to extend the model by the phone number:
-    phone_number = models.IntegerField()
+    phone_number = models.IntegerField(null=True)
     email_verified = models.BooleanField(default=False)
 
 
