@@ -1,8 +1,36 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
-
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.utils.translation import gettext_lazy as _
 from .utils import Calendar
+
+
+class UserManager(BaseUserManager):
+    def create_user(self,
+                    username,
+                    password,
+                    first_name,
+                    last_name,
+                    email,
+                    phone_number,
+                    **extra_fields):
+        if not email:
+            raise ValueError(_('The Email must be set'))
+        email = self.normalize_email(email)
+        user = self.model(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone_number=phone_number,
+            **extra_fields)
+        user.set_password(password)
+        user.email_is_verified = False
+        user.save()
+        return user
+
+    def create_superuser(self, username, email, password, **extra_fields):
+        pass
 
 
 class User(AbstractUser):
