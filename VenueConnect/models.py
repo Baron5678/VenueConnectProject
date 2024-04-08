@@ -13,6 +13,18 @@ class User(AbstractUser):
     phone_number = models.IntegerField()
 
 
+class TimeRange:
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+
+class Calendar:
+    reserved_times = []
+
+    def add_reserved_time(self, reserved_time):
+        self.reserved_times.append(reserved_time)
+
+
 class Venue(models.Model):
     class VenueType(models.TextChoices):
         CONCERT_HALL = 'CH', 'Concert Hall'
@@ -35,11 +47,7 @@ class Venue(models.Model):
         related_name='owned_venues'
     )
 
-
-class Availability(models.Model):
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='availabilities')
-    start_datetime = models.DateTimeField()
-    end_datetime = models.DateTimeField()
+    availabilityCalendar = Calendar()
 
 
 class Review(models.Model):
