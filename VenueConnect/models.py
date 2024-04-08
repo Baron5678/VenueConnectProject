@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
+from .utils import Calendar
+
 
 class User(AbstractUser):
     # By default, django includes:
@@ -11,18 +13,6 @@ class User(AbstractUser):
 
     # we have to extend the model by the phone number:
     phone_number = models.IntegerField()
-
-
-class TimeRange:
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-
-
-class Calendar:
-    reserved_times = []
-
-    def add_reserved_time(self, reserved_time):
-        self.reserved_times.append(reserved_time)
 
 
 class Venue(models.Model):
