@@ -1,5 +1,16 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    # By default, django includes:
+    # first_name instead of name
+    # last_name
+    # email
+
+    # we have to extend the model by the phone number:
+    phone_number = models.IntegerField()
 
 
 class Venue(models.Model):
