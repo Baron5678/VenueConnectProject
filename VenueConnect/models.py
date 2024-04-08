@@ -61,7 +61,7 @@ class User(AbstractUser):
                  last_name,
                  email,
                  phone_number):
-        return UserManager().create_user(username=username,
+        return User.objects.create_user(username=username,
                                          password=password,
                                          first_name=first_name,
                                          last_name=last_name,
