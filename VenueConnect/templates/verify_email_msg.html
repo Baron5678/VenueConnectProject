@@ -1,0 +1,14 @@
+<div style="background-color: #c2c2c2; padding: 15px;">
+    <h2 style="margin: 0; padding: 10px; background-color: #333; color: #fff;">
+        Verify Email</h2>
+    <div style="margin: 0; padding: 15px; background-color: #fff;">
+        <p>Hi {{ user.username }},</p>
+        <p>You created an account on our site, and you need to verify your email. Please click on the button below</p>
+        <a href="{{ request_scheme }}://{{ domain }}{% url 'verify_email_confirm' uidb64=uid token=token %}"
+           style="border: 0; color: #fff; background-color: #333; padding: 15px; font-weight: bold; text-decoration: none;">
+            Verify Email
+        </a>
+        <p style="margin-top: 40px;">Or you can copy the link below to your browser</p>
+        <p>{{ request_scheme }}://{{ domain }}{% url 'verify_email_confirm' uidb64=uid token=token %}</p>
+    </div>
+</div>

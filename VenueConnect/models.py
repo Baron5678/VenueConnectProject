@@ -2,7 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
-from .utils import Calendar
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from .utils import Calendar, email_verification_token
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 
 class UserManager(BaseUserManager):
@@ -63,6 +67,21 @@ class User(AbstractUser):
                                          last_name=last_name,
                                          email=email,
                                          phone_number=phone_number)
+
+    def send_verification_email(self, request_scheme, domain):
+        subject = "Verify Email"
+        message = render_to_string('verify_email_msg.html', {
+            'request_scheme': request_scheme,
+            'user': self,
+            'domain': domain,
+            'uid': urlsafe_base64_encode(force_bytes(self.pk)),
+            'token': email_verification_token.make_token(self),
+        })
+        email = EmailMessage(
+            subject, message, to=[self.email]
+        )
+        email.content_subtype = 'html'
+        email.send()
 
 
 class Venue(models.Model):
