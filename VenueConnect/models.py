@@ -118,6 +118,9 @@ class Venue(models.Model):
         self.availabilityCalendar.reserve(start_time, end_time)
         self.save()
 
+    def removeVenue(self):
+        self.delete()
+
     def updateVenueDetails(self, *,
                            venueName=None,
                            address=None,
