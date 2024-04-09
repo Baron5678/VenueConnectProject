@@ -96,7 +96,7 @@ class Venue(models.Model):
 
     venueName = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    venue_type = models.CharField(
+    venueType = models.CharField(
         max_length=2,
         choices=VenueType.choices,
         default=VenueType.CONCERT_HALL,
@@ -116,6 +116,24 @@ class Venue(models.Model):
 
     def reserveVenue(self, start_time, end_time):
         self.availabilityCalendar.reserve(start_time, end_time)
+        self.save()
+
+    def updateVenueDetails(self, *,
+                           venueName=None,
+                           address=None,
+                           venueType=None,
+                           capacity=None,
+                           owner=None):
+        if venueName is not None:
+            self.venueName = venueName
+        if address is not None:
+            self.address = address
+        if venueType is not None:
+            self.venueType = venueType
+        if capacity is not None:
+            self.capacity = int(capacity)
+        if owner is not None:
+            self.owner = owner
         self.save()
 
 
