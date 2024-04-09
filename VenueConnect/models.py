@@ -7,7 +7,7 @@ from django.core.mail import EmailMessage
 from .utils import Calendar, email_verification_token
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-
+from datetime import datetime
 
 class UserManager(BaseUserManager):
     def create_user(self,
@@ -110,6 +110,9 @@ class Venue(models.Model):
     )
 
     availabilityCalendar = Calendar()
+
+    def checkAvailability(self, time):
+        return self.availabilityCalendar.check_availability(time)
 
 
 class Review(models.Model):
