@@ -17,10 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from rest_framework.routers import DefaultRouter
+
 from VenueConnect import views
+
+router = DefaultRouter()
+router.register(r'auth', views.AuthViewSet, basename='auth')
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('verify_email_confirm/<uidb64>/<token>/', views.verify_email_confirm, name='verify_email_confirm'),
 ]
+
+urlpatterns += router.urls

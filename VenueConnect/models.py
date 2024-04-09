@@ -12,10 +12,10 @@ from django.utils.encoding import force_bytes
 class UserManager(BaseUserManager):
     def create_user(self,
                     username,
+                    email,
                     password,
                     first_name,
                     last_name,
-                    email,
                     phone_number,
                     **extra_fields):
         if not email:
@@ -23,9 +23,9 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(
             username=username,
+            email=email,
             first_name=first_name,
             last_name=last_name,
-            email=email,
             phone_number=phone_number,
             **extra_fields)
         user.set_password(password)
@@ -56,11 +56,11 @@ class User(AbstractUser):
 
     @staticmethod
     def register(username,
-                 password,
-                 first_name,
-                 last_name,
                  email,
-                 phone_number):
+                 password,
+                 first_name='',
+                 last_name='',
+                 phone_number=None):
         return User.objects.create_user(username=username,
                                         password=password,
                                         first_name=first_name,
