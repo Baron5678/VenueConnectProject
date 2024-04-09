@@ -62,11 +62,11 @@ class User(AbstractUser):
                  email,
                  phone_number):
         return User.objects.create_user(username=username,
-                                         password=password,
-                                         first_name=first_name,
-                                         last_name=last_name,
-                                         email=email,
-                                         phone_number=phone_number)
+                                        password=password,
+                                        first_name=first_name,
+                                        last_name=last_name,
+                                        email=email,
+                                        phone_number=phone_number)
 
     def send_verification_email(self, request_scheme, domain):
         subject = "Verify Email"
@@ -91,6 +91,7 @@ class Venue(models.Model):
         THEATER = 'TH', 'Theater'
         CONFERENCE_ROOM = 'CR', 'Conference Room'
         OPEN_AIR = 'OA', 'Open Air'
+
     venueName = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     venue_type = models.CharField(
