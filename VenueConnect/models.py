@@ -52,6 +52,8 @@ class User(AbstractUser):
 
     # we have to extend the model by the phone number:
     phone_number = models.IntegerField(null=True)
+
+    email = models.EmailField(unique=True)
     email_verified = models.BooleanField(default=False)
 
     @staticmethod
