@@ -114,6 +114,10 @@ class Venue(models.Model):
     def checkAvailability(self, time):
         return self.availabilityCalendar.check_availability(time)
 
+    def reserveVenue(self, start_time, end_time):
+        self.availabilityCalendar.reserve(start_time, end_time)
+        self.save()
+
 
 class Review(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='review')
