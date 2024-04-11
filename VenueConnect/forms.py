@@ -1,7 +1,9 @@
 from django import forms
 from django.core.validators import EmailValidator, RegexValidator
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
+
+from .models import User
+import VenueConnect.validators as validators
 
 
 class RegisterForm(UserCreationForm):
@@ -16,27 +18,15 @@ class RegisterForm(UserCreationForm):
 
         # Example: adding a regex validator to the username
         self.fields['username'].validators.append(
-            RegexValidator(
-                regex=r'^[A-Za-z\d@_.+-]{1,150}$',
-                message='Please, stick to requirements below',
-                code='invalid_username'
-            )
+            validators.username_validator
         )
 
         self.fields['password1'].validators.append(
-            RegexValidator(
-                regex=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&(*)]{8,}$',
-                message='Please, stick to requirements below',
-                code='invalid_username'
-            )
+            validators.password_validator
         )
 
         self.fields['password2'].validators.append(
-            RegexValidator(
-                regex=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&(*)]{8,}$',
-                message='Please, stick to requirements above',
-                code='invalid_username'
-            )
+            validators.password_validator
         )
 
 

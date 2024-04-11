@@ -3,6 +3,7 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.contrib.auth import login
 
 from rest_framework import status
 from rest_framework.decorators import action
@@ -12,6 +13,7 @@ from rest_framework.viewsets import ViewSet
 from .models import User
 from .utils import email_verification_token
 from .serializers import UserRegistrationSerializer
+from .forms import RegisterForm
 
 
 def index(request):
@@ -36,8 +38,20 @@ def verify_email_confirm(request, uidb64, token):
 
 class AuthViewSet(ViewSet):
 
-    @action(detail=False, methods=['post'])
-    def register(self, request):
+    @staticmethod
+    def register_form(request):
+        next = request.GET.get('next')
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            if next:
+                return redirect(next)
+            else:
+                return redirect('/')
+
+    @staticmethod
+    def register_api(request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             # Process the validated data (e.g., create user)
@@ -49,3 +63,18 @@ class AuthViewSet(ViewSet):
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def register_render(request):
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form})
+
+    @action(detail=False, methods=['post', 'get'])
+    def register(self, request):
+        if request.method == 'GET':
+            return self.register_render(request)
+        if request.content_type == 'application/x-www-form-urlencoded':
+            return self.register_form(request)
+        if request.content_type == 'application/json':
+            return self.register_api(request)
+        return Response({"message": "Unknown request source"}, status=400)
