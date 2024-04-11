@@ -4,6 +4,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
 
 from rest_framework import status
 from rest_framework.decorators import action
@@ -78,3 +79,26 @@ class AuthViewSet(ViewSet):
         if request.content_type == 'application/json':
             return self.register_api(request)
         return Response({"message": "Unknown request source"}, status=400)
+
+    @staticmethod
+    def login_render(request):
+        form = AuthenticationForm()
+        return render(request, 'login.html', {'form': form})
+
+    @staticmethod
+    def login_form(request):
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if user is not None:
+                login(request, user)
+                return redirect('/', status.HTTP_200_OK)
+        return redirect('/', status.HTTP_401_UNAUTHORIZED)
+
+    @action(detail=False, methods=['post', 'get'])
+    def login(self, request):
+        if request.method == 'GET':
+            return self.login_render(request)
+        if request.content_type == 'application/x-www-form-urlencoded':
+            return self.login_form(request)
+        return Response({"message": "Unknown request source"}, status=status.HTTP_400_BAD_REQUEST)

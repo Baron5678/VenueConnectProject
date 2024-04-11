@@ -28,9 +28,3 @@ class RegisterForm(UserCreationForm):
         self.fields['password2'].validators.append(
             validators.password_validator
         )
-
-
-class LoginForm(AuthenticationForm):
-    class Meta:
-        model = User
-        fields = ["username", "password"]
