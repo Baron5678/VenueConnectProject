@@ -50,6 +50,7 @@ class AuthViewSet(ViewSet):
                 return redirect(next)
             else:
                 return redirect('/')
+        return render(request, 'register.html', {'form': form})
 
     @staticmethod
     def register_api(request):
@@ -93,7 +94,8 @@ class AuthViewSet(ViewSet):
             if user is not None:
                 login(request, user)
                 return redirect('/', status.HTTP_200_OK)
-        return redirect('/', status.HTTP_401_UNAUTHORIZED)
+            return redirect('/', status.HTTP_401_UNAUTHORIZED)
+        return render(request, 'login.html', {'form': form})
 
     @action(detail=False, methods=['post', 'get'])
     def login(self, request):
