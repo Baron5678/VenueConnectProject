@@ -3,7 +3,7 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
 from rest_framework import status
@@ -101,4 +101,13 @@ class AuthViewSet(ViewSet):
             return self.login_render(request)
         if request.content_type == 'application/x-www-form-urlencoded':
             return self.login_form(request)
+        return Response({"message": "Unknown request source"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post', 'get'])
+    def logout(self, request):
+        if request.method == 'POST' or request.method == 'GET':
+            if request.user.is_authenticated:
+                logout(request)
+                return redirect('/', status=status.HTTP_200_OK)
+            return redirect('/', status=status.HTTP_401_UNAUTHORIZED)
         return Response({"message": "Unknown request source"}, status=status.HTTP_400_BAD_REQUEST)
