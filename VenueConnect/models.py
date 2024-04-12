@@ -151,3 +151,11 @@ class BookingOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_order')
     # the spec talks about the 'paymentID' attribute, but since the payment processing
     # has been scrapped, it was skipped
+
+
+class Advertisement(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='advertisement')
+    is_active = models.BooleanField()
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='advertisement')
