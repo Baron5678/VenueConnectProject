@@ -31,7 +31,8 @@ class Command(BaseCommand):
         for _ in range(4):
             models.Review.objects.create(
                 venue=random.choice(models.Venue.objects.all()),
-                review=faker.text()
+                review=faker.text(),
+                author=random.choice(models.User.objects.all())
             )
 
         for _ in range(3):
