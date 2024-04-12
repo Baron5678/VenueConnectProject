@@ -127,3 +127,13 @@ class BookingsView(APIView):
             return render(request, 'bookings.html', {'bookings': bookings})
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class BookingView(APIView):
+    @staticmethod
+    def get(request, userid, booking_id):
+        try:
+            booking = BookingOrder.objects.filter(user_id=userid).get(pk=booking_id)
+            return render(request, 'booking.html', {'booking': booking})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
