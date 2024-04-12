@@ -35,8 +35,11 @@ class Command(BaseCommand):
             )
 
         for _ in range(3):
+            time1 = faker.date_time_this_year()
+            time2 = faker.date_time_this_year()
             models.BookingOrder.objects.create(
-                bookingDate=faker.date_time_this_year(),
+                start_time=min(time1, time2),
+                end_time=max(time1, time2),
                 venue=random.choice(models.Venue.objects.all()),
                 user=random.choice(models.User.objects.all())
             )

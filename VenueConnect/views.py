@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from .forms import RegisterForm
-from .models import User, Advertisement
+from .models import User, Advertisement, BookingOrder
 from .utils import email_verification_token
 
 
@@ -115,5 +115,15 @@ class AdvertisementView(APIView):
         try:
             ad = Advertisement.objects.filter(owner_id=userid).get(pk=ad_id)
             return render(request, 'advertisement.html', {'ad': ad})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class BookingsView(APIView):
+    @staticmethod
+    def get(request, userid):
+        try:
+            bookings = BookingOrder.objects.filter(user_id=userid).all()
+            return render(request, 'bookings.html', {'bookings': bookings})
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
