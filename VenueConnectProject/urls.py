@@ -28,4 +28,6 @@ urlpatterns = [
     path('auth/login/', views.LoginView.as_view(), name='login'),
     path('auth/logout/', views.logout_view, name='logout'),
     path('verify_email_confirm/<uidb64>/<token>/', views.verify_email_confirm, name='verify_email_confirm'),
+    path('users/<userid>/', views.UsersView.as_view(), name='users'),
+    path('404', views.not_found_view, name='not_found'),
 ]

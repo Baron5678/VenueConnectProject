@@ -1,21 +1,26 @@
-from django.shortcuts import render
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
-from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.views import APIView
+from django.forms.models import model_to_dict
+from django.core.exceptions import ObjectDoesNotExist
 
+from .forms import RegisterForm
 from .models import User
 from .utils import email_verification_token
-from .forms import RegisterForm
 
 
 def index(request):
     return render(request, 'index.html')
+
+
+def not_found_view(request):
+    return render(request, '404.html')
 
 
 def verify_email_confirm(request, uidb64, token):
@@ -78,3 +83,14 @@ def logout_view(self, request, **kwargs):
         logout(request)
         return redirect('/', status=status.HTTP_200_OK)
     return redirect('/', status=status.HTTP_401_UNAUTHORIZED)
+
+
+class UsersView(APIView):
+    @staticmethod
+    def get(request, userid):
+        try:
+            user = User.objects.get(pk=userid)
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+        user = model_to_dict(user)
+        return render(request, 'users.html', {'user': user})
