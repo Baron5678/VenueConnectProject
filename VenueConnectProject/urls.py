@@ -21,13 +21,11 @@ from rest_framework.routers import DefaultRouter
 
 from VenueConnect import views
 
-router = DefaultRouter()
-router.register(r'auth', views.AuthViewSet, basename='auth')
-
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
+    path('auth/register/', views.RegisterView.as_view(), name='register'),
+    path('auth/login/', views.LoginView.as_view(), name='login'),
+    path('auth/logout/', views.logout_view, name='logout'),
     path('verify_email_confirm/<uidb64>/<token>/', views.verify_email_confirm, name='verify_email_confirm'),
 ]
-
-urlpatterns += router.urls
