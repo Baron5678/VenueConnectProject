@@ -107,3 +107,13 @@ class AdvertisementsView(APIView):
             return render(request, 'advertisements.html', {'advertisements': advertisements})
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class AdvertisementView(APIView):
+    @staticmethod
+    def get(request, userid, ad_id):
+        try:
+            ad = Advertisement.objects.filter(owner_id=userid).get(pk=ad_id)
+            return render(request, 'advertisement.html', {'ad': ad})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
