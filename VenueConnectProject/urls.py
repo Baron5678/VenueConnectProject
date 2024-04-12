@@ -17,8 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from rest_framework.routers import DefaultRouter
-
 from VenueConnect import views
 
 urlpatterns = [
@@ -29,5 +27,6 @@ urlpatterns = [
     path('auth/logout/', views.logout_view, name='logout'),
     path('verify_email_confirm/<uidb64>/<token>/', views.verify_email_confirm, name='verify_email_confirm'),
     path('users/<userid>/', views.UsersView.as_view(), name='users'),
+    path('users/<userid>/advertisements', views.AdvertisementsView.as_view(), name='users'),
     path('404', views.not_found_view, name='not_found'),
 ]

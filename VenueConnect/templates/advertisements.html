@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <thead>
+        <tr>
+            <th>Advertisement Id</th>
+            <th>User Id</th>
+            <th>title</th>
+            <th>description</th>
+            <th>is active</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ad in advertisements %}
+            <tr>
+                <td>{{ ad.id }}</td>
+                <td>{{ ad.owner_id }}</td>
+                <td>{{ ad.title }}</td>
+                <td>{{ ad.description }}</td>
+                <td>{{ ad.is_active }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

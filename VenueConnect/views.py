@@ -1,17 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ObjectDoesNotExist
+from django.forms.models import model_to_dict
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.views import APIView
-from django.forms.models import model_to_dict
-from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import RegisterForm
-from .models import User
+from .models import User, Advertisement
 from .utils import email_verification_token
 
 
@@ -90,7 +90,20 @@ class UsersView(APIView):
     def get(request, userid):
         try:
             user = User.objects.get(pk=userid)
+            user = model_to_dict(user)
+            return render(request, 'users.html', {'user': user})
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
-        user = model_to_dict(user)
-        return render(request, 'users.html', {'user': user})
+
+
+class AdvertisementsView(APIView):
+    @staticmethod
+    def get(request, userid):
+        try:
+            user = User.objects.get(pk=userid)
+            advertisements = Advertisement.objects.filter(owner=user)
+            if not advertisements:
+                return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+            return render(request, 'advertisements.html', {'advertisements': advertisements})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
