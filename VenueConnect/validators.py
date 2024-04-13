@@ -11,3 +11,9 @@ username_validator = RegexValidator(
     message='Please, stick to requirements below',
     code='invalid_username'
 )
+
+phone_validator = RegexValidator(
+    regex=r'^\+?\d{1,3}?[-.\s]?\(?\d{1,3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$|^\d+$',
+    message='Please, stick to requirements below',
+    code='invalid_phone_number'
+)

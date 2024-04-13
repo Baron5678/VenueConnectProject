@@ -11,14 +11,22 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ["first_name", "last_name", "email", "phone_number", "password1", "password2"]
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         # Example: adding a regex validator to the username
-        self.fields['username'].validators.append(
+        self.fields['first_name'].validators.append(
             validators.username_validator
+        )
+
+        self.fields['last_name'].validators.append(
+            validators.username_validator
+        )
+
+        self.fields['phone_number'].validators.append(
+            validators.phone_validator
         )
 
         self.fields['password1'].validators.append(
