@@ -26,6 +26,7 @@ router.register(r'auth', views.AuthViewSet, basename='auth')
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('signUp.html/', views.signup, name='signup'),
     path('admin/', admin.site.urls),
     path('verify_email_confirm/<uidb64>/<token>/', views.verify_email_confirm, name='verify_email_confirm'),
 ]

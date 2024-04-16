@@ -1,13 +1,14 @@
 ﻿<!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title>Crear usuario</title>
 
     <style>
         body {
-            font-family: Georgia, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -27,17 +28,26 @@
             align-items: center;
         }
 
-            form input {
+            form div {
                 width: 100%;
-                padding: 10px;
                 margin-bottom: 10px;
+            }
+
+            form label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            form input {
+                width: calc(100% - 22px); /* 100% - padding * 2 - border * 2 */
+                padding: 10px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 box-sizing: border-box;
             }
 
             form button {
-                width: 100%;
+                width: calc(100% - 22px); /* 100% - padding * 2 - border * 2 */
                 padding: 10px;
                 background-color: #007bff;
                 color: #fff;
@@ -50,31 +60,31 @@
                 form button:hover {
                     background-color: #0056b3;
                 }
-
-                .donthaveaccount {
-                    text-align: center;
-                    margin-top: 20px;
-                }
     </style>
-
 </head>
 <body>
 
-    <form action="procesar_formulario.php" method="post">
-        <h1>Sign In</h1>
+    <form action="procesar_registro.php" method="post">
+        <h1>Create user</h1>
         <div>
-            <label for="usuario">Username:</label>
-            <input type="text" id="usuario" name="usuario" required>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
         </div>
         <div>
-            <label for="contrasena">Password:</label>
-            <input type="password" id="contrasena" name="contrasena" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
         </div>
-        <button type="submit">Sign In</button>
-        <div class="donthaveaccount">
-            Don't have an account? <a href="signUp.html">Sign up</a>
+        <div>
+            <label for="password1">Password:</label>
+            <input type="password" id="password1" name="password1" required>
         </div>
+        <div>
+            <label for="password2">Repeat password:</label>
+            <input type="password" id="password2" name="password2" required>
+        </div>
+        <button type="submit">Sign up</button>
     </form>
     
+
 </body>
 </html>

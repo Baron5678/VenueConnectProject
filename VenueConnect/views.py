@@ -17,6 +17,9 @@ from .serializers import UserRegistrationSerializer
 def index(request):
     return render(request, 'index.html')
 
+def signup(request):
+    return render(request, 'signUp.html')
+
 
 def verify_email_confirm(request, uidb64, token):
     try:
