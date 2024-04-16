@@ -1,13 +1,14 @@
-from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.utils.translation import gettext_lazy as _
-from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-from .utils import Calendar, email_verification_token
-from django.utils.http import urlsafe_base64_encode
+from django.db import models
+from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
-from datetime import datetime
+from django.utils.http import urlsafe_base64_encode
+from django.utils.translation import gettext_lazy as _
+
+from .utils import Calendar, email_verification_token
+
 
 class UserManager(BaseUserManager):
     def create_user(self,
@@ -143,10 +144,21 @@ class Venue(models.Model):
 class Review(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='review')
     review = models.TextField(max_length=500)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review')
 
 
 class BookingOrder(models.Model):
-    bookingDate = models.DateTimeField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='booking_order')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_order')
     # the spec talks about the 'paymentID' attribute, but since the payment processing
     # has been scrapped, it was skipped
+
+
+class Advertisement(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='advertisement')
+    is_active = models.BooleanField()
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='advertisement')

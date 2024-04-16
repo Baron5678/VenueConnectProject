@@ -1,7 +1,9 @@
 from django import forms
 from django.core.validators import EmailValidator, RegexValidator
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
+
+from .models import User
+import VenueConnect.validators as validators
 
 
 class RegisterForm(UserCreationForm):
@@ -9,38 +11,28 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ["first_name", "last_name", "email", "phone_number", "password1", "password2"]
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         # Example: adding a regex validator to the username
-        self.fields['username'].validators.append(
-            RegexValidator(
-                regex=r'^[A-Za-z\d@_.+-]{1,150}$',
-                message='Please, stick to requirements below',
-                code='invalid_username'
-            )
+        self.fields['first_name'].validators.append(
+            validators.username_validator
+        )
+
+        self.fields['last_name'].validators.append(
+            validators.username_validator
+        )
+
+        self.fields['phone_number'].validators.append(
+            validators.phone_validator
         )
 
         self.fields['password1'].validators.append(
-            RegexValidator(
-                regex=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&(*)]{8,}$',
-                message='Please, stick to requirements below',
-                code='invalid_username'
-            )
+            validators.password_validator
         )
 
         self.fields['password2'].validators.append(
-            RegexValidator(
-                regex=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&(*)]{8,}$',
-                message='Please, stick to requirements above',
-                code='invalid_username'
-            )
+            validators.password_validator
         )
-
-
-class LoginForm(AuthenticationForm):
-    class Meta:
-        model = User
-        fields = ["username", "password"]

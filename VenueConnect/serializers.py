@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
+import VenueConnect.validators as validators
+
 
 class UserRegistrationSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=100)
+    username = serializers.CharField(validators=[validators.username_validator])
     email = serializers.EmailField()
-    password = serializers.CharField(max_length=100)
+    password = serializers.CharField(validators=[validators.password_validator])
 
     def validate(self, data):
         if 'username' not in data or 'email' not in data or 'password' not in data:

@@ -17,18 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from rest_framework.routers import DefaultRouter
-
 from VenueConnect import views
-
-router = DefaultRouter()
-router.register(r'auth', views.AuthViewSet, basename='auth')
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('signUp.html/', views.signup, name='signup'),
     path('admin/', admin.site.urls),
+    path('auth/register/', views.RegisterView.as_view(), name='register'),
+    path('auth/login/', views.LoginView.as_view(), name='login'),
+    path('auth/logout/', views.logout_view, name='logout'),
     path('verify_email_confirm/<uidb64>/<token>/', views.verify_email_confirm, name='verify_email_confirm'),
+    path('users/<userid>/', views.UsersView.as_view(), name='users'),
+    path('users/<userid>/advertisements', views.AdvertisementsView.as_view(), name='users'),
+    path('users/<userid>/bookings/', views.BookingsView.as_view(), name='users'),
+    path('users/<userid>/bookings/<booking_id>', views.BookingView.as_view(), name='users'),
+    path('users/<userid>/advertisements/<ad_id>/', views.AdvertisementView.as_view(), name='users'),
+    path('404', views.not_found_view, name='not_found'),
 ]
-
-urlpatterns += router.urls

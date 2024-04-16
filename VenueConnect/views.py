@@ -1,17 +1,18 @@
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ObjectDoesNotExist
+from django.forms.models import model_to_dict
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.shortcuts import redirect
-from django.contrib import messages
-
 from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.views import APIView
 
-from .models import User
+from .forms import RegisterForm
+from .models import User, Advertisement, BookingOrder
 from .utils import email_verification_token
-from .serializers import UserRegistrationSerializer
 
 
 def index(request):
@@ -19,6 +20,10 @@ def index(request):
 
 def signup(request):
     return render(request, 'signUp.html')
+
+
+def not_found_view(request):
+    return render(request, '404.html')
 
 
 def verify_email_confirm(request, uidb64, token):
@@ -37,18 +42,101 @@ def verify_email_confirm(request, uidb64, token):
     return render(request, 'verify_email_confirm.html')
 
 
-class AuthViewSet(ViewSet):
+class RegisterView(APIView):
+    @staticmethod
+    def get(request, **kwargs):
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form}, **kwargs)
 
-    @action(detail=False, methods=['post'])
-    def register(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            # Process the validated data (e.g., create user)
-            # For demonstration, returning a success response
-            username = serializer.validated_data['username']
-            email = serializer.validated_data['email']
-            password = serializer.validated_data['password']
-            User.register(username=username, email=email, password=password)
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    @staticmethod
+    def post(request):
+        next = request.GET.get('next')
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if user is not None:
+                login(request, user)
+                if next:
+                    return redirect(next)
+                else:
+                    return redirect('/')
+        return render(request, 'register.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(APIView):
+    @staticmethod
+    def get(request, **kwargs):
+        form = AuthenticationForm()
+        return render(request, 'login.html', {'form': form}, **kwargs)
+
+    @staticmethod
+    def post(request):
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if user is not None:
+                login(request, user)
+                return redirect('/', status.HTTP_200_OK)
+            return redirect('/', status.HTTP_401_UNAUTHORIZED)
+        return render(request, 'login.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def logout_view(self, request, **kwargs):
+    if request.user.is_authenticated:
+        logout(request)
+        return redirect('/', status=status.HTTP_200_OK)
+    return redirect('/', status=status.HTTP_401_UNAUTHORIZED)
+
+
+class UsersView(APIView):
+    @staticmethod
+    def get(request, userid):
+        try:
+            user = User.objects.get(pk=userid)
+            user = model_to_dict(user)
+            return render(request, 'users.html', {'user': user})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class AdvertisementsView(APIView):
+    @staticmethod
+    def get(request, userid):
+        try:
+            user = User.objects.get(pk=userid)
+            advertisements = Advertisement.objects.filter(owner=user)
+            if not advertisements:
+                return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+            return render(request, 'advertisements.html', {'advertisements': advertisements})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class AdvertisementView(APIView):
+    @staticmethod
+    def get(request, userid, ad_id):
+        try:
+            ad = Advertisement.objects.filter(owner_id=userid).get(pk=ad_id)
+            return render(request, 'advertisement.html', {'ad': ad})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class BookingsView(APIView):
+    @staticmethod
+    def get(request, userid):
+        try:
+            bookings = BookingOrder.objects.filter(user_id=userid).all()
+            return render(request, 'bookings.html', {'bookings': bookings})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class BookingView(APIView):
+    @staticmethod
+    def get(request, userid, booking_id):
+        try:
+            booking = BookingOrder.objects.filter(user_id=userid).get(pk=booking_id)
+            return render(request, 'booking.html', {'booking': booking})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
