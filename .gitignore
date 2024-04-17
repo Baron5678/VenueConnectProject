@@ -17,3 +17,4 @@ media/
 EMAIL_LOGS/
 VenueConnect/migrations
 *.pdf
+/.vs

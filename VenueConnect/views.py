@@ -15,11 +15,11 @@ from .models import User, Advertisement, BookingOrder
 from .utils import email_verification_token
 
 
-def index(request):
-    return render(request, 'index.html')
+def login(request):
+    return render(request, 'login.html')
 
-def signup(request):
-    return render(request, 'signUp.html')
+def register(request):
+    return render(request, 'register.html')
 
 
 def not_found_view(request):
