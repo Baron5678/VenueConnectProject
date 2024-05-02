@@ -21,6 +21,8 @@ class Calendar:
     def reserve(self, start_time, end_time):
         self.reserved_times.append(TimeRange(start_time, end_time))
 
+        return (end_time - start_time).days
+
     def check_availability(self, time):
         for time_range in self.reserved_times:
             if time_range.includes(time):

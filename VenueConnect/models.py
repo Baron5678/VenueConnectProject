@@ -7,7 +7,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 
-from .utils import Calendar, email_verification_token
+from .utils import Calendar, email_verification_token, TimeRange
 
 
 class UserManager(BaseUserManager):
@@ -86,15 +86,27 @@ class User(AbstractUser):
         email.content_subtype = 'html'
         email.send()
 
+    def make_booking(self, venue: Venue, time: TimeRange):
+        self.booking_order = BookingOrder()
+        self.booking_order.user = self
+        self.booking_order.start_time = time.start_time
+        self.booking_order.end_time = time.end_time
+        self.booking_order.venue = venue
+        if venue.checkAvailability(time):
+            self.booking_order.price = venue.reserveVenue(time.start_time, time.end_time)
+        else:
+            return
+
+
+class VenueType(models.TextChoices):
+    CONCERT_HALL = 'CH', 'Concert Hall'
+    SPORTS_ARENA = 'SA', 'Sports Arena'
+    THEATER = 'TH', 'Theater'
+    CONFERENCE_ROOM = 'CR', 'Conference Room'
+    OPEN_AIR = 'OA', 'Open Air'
+
 
 class Venue(models.Model):
-    class VenueType(models.TextChoices):
-        CONCERT_HALL = 'CH', 'Concert Hall'
-        SPORTS_ARENA = 'SA', 'Sports Arena'
-        THEATER = 'TH', 'Theater'
-        CONFERENCE_ROOM = 'CR', 'Conference Room'
-        OPEN_AIR = 'OA', 'Open Air'
-
     venueName = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     venueType = models.CharField(
@@ -109,15 +121,16 @@ class Venue(models.Model):
         on_delete=models.CASCADE,
         related_name='owned_venues'
     )
-
+    price_per_day = models.IntegerField()
     availabilityCalendar = Calendar()
 
     def checkAvailability(self, time):
         return self.availabilityCalendar.check_availability(time)
 
     def reserveVenue(self, start_time, end_time):
-        self.availabilityCalendar.reserve(start_time, end_time)
+        days = self.availabilityCalendar.reserve(start_time, end_time)
         self.save()
+        return days * self.price_per_day
 
     def removeVenue(self):
         self.delete()
@@ -150,8 +163,10 @@ class Review(models.Model):
 class BookingOrder(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    price = models.IntegerField(default=0)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='booking_order')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_order')
+
     # the spec talks about the 'paymentID' attribute, but since the payment processing
     # has been scrapped, it was skipped
 
