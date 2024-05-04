@@ -86,16 +86,33 @@ class User(AbstractUser):
         email.content_subtype = 'html'
         email.send()
 
-    def make_booking(self, venue: Venue, time: TimeRange):
-        self.booking_order = BookingOrder()
-        self.booking_order.user = self
-        self.booking_order.start_time = time.start_time
-        self.booking_order.end_time = time.end_time
-        self.booking_order.venue = venue
+    def make_booking(self, venue: 'Venue', time: TimeRange):
         if venue.checkAvailability(time):
+            self.booking_order = BookingOrder()
+            self.booking_order.user = self
+            self.booking_order.start_time = time.start_time
+            self.booking_order.end_time = time.end_time
+            self.booking_order.venue = venue
             self.booking_order.price = venue.reserveVenue(time.start_time, time.end_time)
+            self.booking_order.save()
         else:
+            return 0
+
+    def cancel_booking(self):
+        self.booking_order.delete()
+
+    def browse_venues(self, requested_capacity: int, requested_address: str):
+        return Venue.objects.filter(capacity=requested_capacity, address=requested_address)
+
+    def rate_venue(self, chosen_venue: 'Venue', description: str, feedback: int):
+        if 10 <= feedback <= 0:
             return
+        review = Review()
+        review.venue = chosen_venue
+        review.author = self
+        review.review = description
+        review.feedback = feedback
+        review.save()
 
 
 class VenueType(models.TextChoices):
@@ -156,6 +173,7 @@ class Venue(models.Model):
 
 class Review(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='review')
+    feedback = models.IntegerField()
     review = models.TextField(max_length=500)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review')
 
