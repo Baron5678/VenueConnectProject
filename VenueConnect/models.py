@@ -105,14 +105,21 @@ class User(AbstractUser):
         return Venue.objects.filter(capacity=requested_capacity, address=requested_address)
 
     def rate_venue(self, chosen_venue: 'Venue', description: str, feedback: int):
-        if 10 <= feedback <= 0:
-            return
+        if 10 < feedback < 0:
+            return 0
         review = Review()
         review.venue = chosen_venue
         review.author = self
         review.review = description
         review.feedback = feedback
         review.save()
+
+    def message_user(self, subject: str, receiver_email: str, message: str):
+        if 5000 < len(message) < 200 and 50 < len(subject) < 1:
+            return 0
+        email = EmailMessage(subject, message, from_email=self.email, to=receiver_email)
+        email.content_subtype = 'html'
+        email.send()
 
 
 class VenueType(models.TextChoices):
