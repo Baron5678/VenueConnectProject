@@ -6,6 +6,13 @@ from .models import User
 import VenueConnect.validators as validators
 
 
+class SignInForm(AuthenticationForm):
+  #  usuario = forms.CharField(label='Username', max_length=100)
+   # contrasena = forms.CharField(label='Password', widget=forms.PasswordInput)
+
+    class Meta:
+        fields = ["usuario","contrasena"]
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(validators=[EmailValidator()])  # Custom defined email field
 
@@ -16,11 +23,11 @@ class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
-        # Example: adding a regex validator to the username
+      #   Example: adding a regex validator to the username
         self.fields['first_name'].validators.append(
             validators.username_validator
         )
-
+       
         self.fields['last_name'].validators.append(
             validators.username_validator
         )

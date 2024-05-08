@@ -11,15 +11,40 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from .forms import RegisterForm
+from .forms import SignInForm
 from .models import User, Advertisement, BookingOrder
 from .utils import email_verification_token
 
 
+
 def login(request):
-    return render(request, 'login.html')
+    
+    if request.method == 'POST':
+        form = SignInForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                print("Okey!")
+                return redirect('users')
+    else:
+        form = SignInForm() 
+
+    
+    return render(request, 'login.html', {'form': form})
 
 def register(request):
     return render(request, 'register.html')
+
+
+def index(request):
+    return render(request, 'index.html')
+
+#def create_venue(request):
+    # Tu lógica para crear un lugar aquí
+ #   return render(request, 'create_venue.html')
 
 
 def not_found_view(request):
@@ -76,6 +101,7 @@ class LoginView(APIView):
             user = form.get_user()
             if user is not None:
                 login(request, user)
+                print("Okey2!")
                 return redirect('/', status.HTTP_200_OK)
             return redirect('/', status.HTTP_401_UNAUTHORIZED)
         return render(request, 'login.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
