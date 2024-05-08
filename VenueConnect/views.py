@@ -18,22 +18,7 @@ from .utils import email_verification_token
 
 
 def login(request):
-    
-    if request.method == 'POST':
-        form = SignInForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                print("Okey!")
-                return redirect('users')
-    else:
-        form = SignInForm() 
-
-    
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'home.html')
 
 def register(request):
     return render(request, 'register.html')
@@ -43,7 +28,7 @@ def index(request):
     return render(request, 'index.html')
 
 #def create_venue(request):
-    # Tu lógica para crear un lugar aquí
+    # Tu lï¿½gica para crear un lugar aquï¿½
  #   return render(request, 'create_venue.html')
 
 
