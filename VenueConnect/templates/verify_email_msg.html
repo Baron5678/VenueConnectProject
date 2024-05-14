@@ -7,9 +7,14 @@
     <title>Verify Email</title>
     <style>
         body {
+            font-family: Georgia, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            background-color: #c2c2c2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .container {
@@ -41,7 +46,7 @@
         .button {
             display: inline-block;
             padding: 15px;
-            background-color: #333;
+            background-color: #007bff;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
@@ -59,7 +64,7 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="header">Verify Email</h2>
+        <h2>Verify Email</h2>
         <div class="content">
             <p>Hi {{ user.username }},</p>
             <p>You created an account on our site, and you need to verify your email. Please click on the button below:</p>
