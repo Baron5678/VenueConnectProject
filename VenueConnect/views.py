@@ -86,7 +86,6 @@ class LoginView(APIView):
             user = form.get_user()
             if user is not None:
                 login(request, user)
-                print("Okey2!")
                 return redirect('/', status.HTTP_200_OK)
             return redirect('/', status.HTTP_401_UNAUTHORIZED)
         return render(request, 'login.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)

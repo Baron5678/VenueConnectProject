@@ -21,7 +21,6 @@ from VenueConnect import views
 
 urlpatterns = [
     path('', views.login, name='login'),
-    path('register.html/', views.register, name='register'),
     path('admin/', admin.site.urls),
     path('auth/register/', views.RegisterView.as_view(), name='register'),
     path('auth/login/', views.LoginView.as_view(), name='login'),
