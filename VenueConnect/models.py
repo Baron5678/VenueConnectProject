@@ -134,6 +134,7 @@ class VenueType(models.TextChoices):
 class Venue(models.Model):
     venueName = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
+    price_per_day = models.IntegerField(default=0)
     venueType = models.CharField(
         max_length=2,
         choices=VenueType.choices,
@@ -146,8 +147,7 @@ class Venue(models.Model):
         on_delete=models.CASCADE,
         related_name='owned_venues'
     )
-    price_per_day = models.IntegerField(default=0)
-    availabilityCalendar =  Calendar()
+    availabilityCalendar = Calendar()
 
     def checkAvailability(self, time):
         return self.availabilityCalendar.check_availability(time)
@@ -187,10 +187,10 @@ class Review(models.Model):
 
 
 class BookingOrder(models.Model):
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    price = models.IntegerField()
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='booking_order')
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(default=timezone.now)
+    price = models.IntegerField(default=0)
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='booking_order', )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_order', default=0)
 
     # the spec talks about the 'paymentID' attribute, but since the payment processing
