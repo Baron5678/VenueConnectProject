@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 from .utils import Calendar, email_verification_token, TimeRange
 
@@ -188,7 +189,7 @@ class Review(models.Model):
 class BookingOrder(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    price = models.IntegerField(default=0)
+    price = models.IntegerField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='booking_order')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_order')
 

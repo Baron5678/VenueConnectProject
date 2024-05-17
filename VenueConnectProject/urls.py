@@ -20,7 +20,7 @@ from django.urls import path
 from VenueConnect import views
 
 urlpatterns = [
-    path('', views.login, name='login'),
+    path('', views.hoeme_view, name='home'),
     path('register.html/', views.register, name='register'),
     path('admin/', admin.site.urls),
     path('auth/register/', views.RegisterView.as_view(), name='register'),

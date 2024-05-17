@@ -17,7 +17,7 @@ from .utils import email_verification_token
 
 
 
-def login(request):
+def hoeme_view(request):
     return render(request, 'home.html')
 
 def register(request):
