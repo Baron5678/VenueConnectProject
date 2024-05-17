@@ -146,8 +146,8 @@ class Venue(models.Model):
         on_delete=models.CASCADE,
         related_name='owned_venues'
     )
-    price_per_day = models.IntegerField()
-    availabilityCalendar = Calendar()
+    price_per_day = models.IntegerField(default=0)
+    availabilityCalendar =  Calendar()
 
     def checkAvailability(self, time):
         return self.availabilityCalendar.check_availability(time)
@@ -181,9 +181,9 @@ class Venue(models.Model):
 
 class Review(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='review')
-    feedback = models.IntegerField()
+    feedback = models.IntegerField(default=0)
     review = models.TextField(max_length=500)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review', default=0)
 
 
 class BookingOrder(models.Model):
@@ -191,7 +191,7 @@ class BookingOrder(models.Model):
     end_time = models.DateTimeField()
     price = models.IntegerField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='booking_order')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_order')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_order', default=0)
 
     # the spec talks about the 'paymentID' attribute, but since the payment processing
     # has been scrapped, it was skipped
