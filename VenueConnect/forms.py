@@ -5,14 +5,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User
 import VenueConnect.validators as validators
 
-
-class SignInForm(AuthenticationForm):
-  #  usuario = forms.CharField(label='Username', max_length=100)
-   # contrasena = forms.CharField(label='Password', widget=forms.PasswordInput)
-
-    class Meta:
-        fields = ["usuario","contrasena"]
-
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(validators=[EmailValidator()])  # Custom defined email field
 
