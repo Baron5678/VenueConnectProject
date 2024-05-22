@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from .forms import RegisterForm
-from .forms import SignInForm
+#from .forms import SignInForm
 from .models import User, Advertisement, BookingOrder
 from .utils import email_verification_token
 

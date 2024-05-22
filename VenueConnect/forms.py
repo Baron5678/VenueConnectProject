@@ -7,10 +7,11 @@ import VenueConnect.validators as validators
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(validators=[EmailValidator()])  # Custom defined email field
+    username = forms.CharField(max_length=150)
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email", "phone_number", "password1", "password2"]
+        fields = ["first_name", "last_name", "username", "email", "phone_number", "password1", "password2"]
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -21,6 +22,10 @@ class RegisterForm(UserCreationForm):
         )
        
         self.fields['last_name'].validators.append(
+            validators.username_validator
+        )
+
+        self.fields['username'].validators.append(
             validators.username_validator
         )
 
