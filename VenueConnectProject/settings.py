@@ -125,5 +125,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTHENTICATION_BACKENDS = [
+    'VenueConnect.backend.NameAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Optional, to keep the default authentication as fallback
+]
+
+
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "EMAIL_LOGS"

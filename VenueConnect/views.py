@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect
@@ -9,9 +8,9 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.views import APIView
-
+from django.contrib.sites.shortcuts import get_current_site
 from .forms import RegisterForm
-from .forms import SignInForm
+from .forms import NameAuthForm
 from .models import User, Advertisement, BookingOrder
 from .utils import email_verification_token
 
@@ -64,8 +63,15 @@ class RegisterView(APIView):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            request_scheme = 'https' if request.is_secure() else 'http'
+            domain = get_current_site(request).domain
             if user is not None:
-                login(request, user)
+                # For testing other functionality of email verified user
+                # Just assume that user is verified by email
+                user.email_verified = True
+                user.save()
+                # user.send_verification_email(request_scheme, domain)
+                login(request, user, backend='VenueConnect.backend.NameAuthenticationBackend')
                 if next:
                     return redirect(next)
                 else:
@@ -76,16 +82,17 @@ class RegisterView(APIView):
 class LoginView(APIView):
     @staticmethod
     def get(request, **kwargs):
-        form = AuthenticationForm()
+        form = NameAuthForm()
         return render(request, 'login.html', {'form': form}, **kwargs)
 
     @staticmethod
     def post(request):
-        form = AuthenticationForm(request, request.POST)
+        form = NameAuthForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             if user is not None:
-                login(request, user)
+                if form.is_valid():
+                    login(request, user, backend='VenueConnect.backend.NameAuthenticationBackend')
                 return redirect('/', status.HTTP_200_OK)
             return redirect('/', status.HTTP_401_UNAUTHORIZED)
         return render(request, 'login.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
@@ -147,6 +154,17 @@ class BookingView(APIView):
     def get(request, userid, booking_id):
         try:
             booking = BookingOrder.objects.filter(user_id=userid).get(pk=booking_id)
+            return render(request, 'booking.html', {'booking': booking})
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class ProfileView(APIView):
+    @staticmethod
+    def get(request, uid):
+        try:
+            user = User.objects.get(pk=uid)
+            booked_venue = Venue.objects.filter()
             return render(request, 'booking.html', {'booking': booking})
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)

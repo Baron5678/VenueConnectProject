@@ -203,3 +203,5 @@ class Advertisement(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='advertisement')
     is_active = models.BooleanField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='advertisement')
+
+
