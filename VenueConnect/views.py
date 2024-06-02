@@ -22,18 +22,11 @@ def hoeme_view(request):
 def register(request):
     return render(request, 'register.html')
 
-
 def index(request):
     return render(request, 'index.html')
 
-#def create_venue(request):
-    # Tu l�gica para crear un lugar aqu�
- #   return render(request, 'create_venue.html')
-
-
 def not_found_view(request):
     return render(request, '404.html')
-
 
 def verify_email_confirm(request, uidb64, token):
     try:
