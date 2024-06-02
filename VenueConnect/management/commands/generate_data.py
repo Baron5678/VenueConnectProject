@@ -1,6 +1,10 @@
 import random
 
 from django.core.management.base import BaseCommand
+from django.core.management import call_command
+from django.utils import timezone
+from django.db import connections
+from django.db.migrations.executor import MigrationExecutor
 from faker import Faker
 
 import VenueConnect.models as models
@@ -8,7 +12,18 @@ import VenueConnect.models as models
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
+        # recreate the database
+        self.stdout.write('Resetting the database')
+        call_command('flush', '--no-input', verbosity=0)
+        call_command('makemigrations', verbosity=0)
+        call_command('migrate', verbosity=0)
+        self.stdout.write('Creating admin user. Login: admin Password: admin')
+        models.User.objects.create_superuser('admin', 'admin@admin', 'admin')
+        self.stdout.write('Creating normal user. Login: user1 Password: user1')
+        models.User.register('user1', 'user1@users.com', 'user1')
+
         faker = Faker()
+
         for _ in range(3):
             models.User.register(
                 faker.user_name(),
@@ -25,7 +40,7 @@ class Command(BaseCommand):
                 address=faker.address(),
                 capacity=faker.random_int(),
                 owner=random.choice(models.User.objects.all()),
-                venueType=random.choice([choice[0] for choice in models.Venue.VenueType.choices])
+                venueType=random.choice([choice[0] for choice in models.VenueType])
             )
 
         for _ in range(4):
@@ -36,8 +51,8 @@ class Command(BaseCommand):
             )
 
         for _ in range(3):
-            time1 = faker.date_time_this_year()
-            time2 = faker.date_time_this_year()
+            time1 = faker.date_time_this_year(tzinfo=timezone.get_current_timezone())
+            time2 = faker.date_time_this_year(tzinfo=timezone.get_current_timezone())
             models.BookingOrder.objects.create(
                 start_time=min(time1, time2),
                 end_time=max(time1, time2),
