@@ -17,10 +17,10 @@ class Command(BaseCommand):
         call_command('flush', '--no-input', verbosity=0)
         call_command('makemigrations', verbosity=0)
         call_command('migrate', verbosity=0)
-        self.stdout.write('Creating admin user. Login: admin Password: admin')
+        self.stdout.write('Creating admin user. Username: admin Password: admin')
         models.User.objects.create_superuser('admin', 'admin@admin', 'admin')
-        self.stdout.write('Creating normal user. Login: user1 Password: user1')
-        models.User.register('user1', 'user1@users.com', 'user1')
+        self.stdout.write('Creating normal user John Doe. Username: user1 Password: password')
+        models.User.register('user1', 'user1@users.com', 'password', 'John', 'Doe')
 
         faker = Faker()
 
