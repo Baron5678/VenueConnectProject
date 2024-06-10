@@ -2,38 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ad</title>
+    <link rel="stylesheet" type="text/css" href="../../static/style.css">
 </head>
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>Field</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>ID</td>
-        <td>{{ ad.id }}</td>
-    </tr>
-    <tr>
-        <td>Owner Id</td>
-        <td>{{ ad.owner_id }}</td>
-    </tr>
-    <tr>
-        <td>Title</td>
-        <td>{{ ad.title }}</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>{{ ad.description }}</td>
-    </tr>
-    <tr>
-        <td>Is Active</td>
-        <td>{{ ad.is_active }}</td>
-    </tr>
-    </tbody>
-</table>
+    <form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Advertisement</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>{{ ad.id }}</td>
+                </tr>
+                <tr>
+                    <td>Owner Id</td>
+                    <td>{{ ad.owner_id }}</td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td>{{ ad.title }}</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>{{ ad.description }}</td>
+                </tr>
+                <tr>
+                    <td>Is Active</td>
+                    <td>{{ ad.is_active }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="button">Book</a>
+    </form>
+
 </body>
 </html>

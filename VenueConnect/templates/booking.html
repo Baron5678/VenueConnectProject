@@ -2,38 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Booking</title>
+    <link rel="stylesheet" type="text/css" href="../../static/style.css">
 </head>
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>Field</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Reservation Id</td>
-        <td>{{ booking.id }}</td>
-    </tr>
-    <tr>
-        <td>User Id</td>
-        <td>{{ booking.user_id }}</td>
-    </tr>
-    <tr>
-        <td>Venue Id</td>
-        <td>{{ booking.venue_id }}</td>
-    </tr>
-    <tr>
-        <td>Start time</td>
-        <td>{{ booking.start_time }}</td>
-    </tr>
-    <tr>
-        <td>End time</td>
-        <td>{{ booking.end_time }}</td>
-    </tr>
-    </tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Booking</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reservation</td>
+                <td>{{ booking.id }}</td>
+            </tr>
+            <tr>
+                <td>Venue ID</td>
+                <td>{{ booking.venue_id }}</td>
+            </tr>
+            <tr>
+                <td>Start time</td>
+                <td>{{ booking.start_time }}</td>
+            </tr>
+            <tr>
+                <td>End time</td>
+                <td>{{ booking.end_time }}</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

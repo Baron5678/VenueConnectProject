@@ -2,30 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Bookings</title>
+    <link rel="stylesheet" type="text/css" href="../../static/style.css">
 </head>
 <body>
-<table>
-    <thead>
-        <tr>
-            <th>Reservation Id</th>
-            <th>User Id</th>
-            <th>Venue Id</th>
-            <th>Start Time</th>
-            <th>End Timee</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for booking in bookings %}
+    <table>
+        <thead>
+            <tr>
+                <th>Reservation</th>
+                <th>Venue ID</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
             <tr>
                 <td>{{ booking.id }}</td>
-                <td>{{ booking.user_id }}</td>
                 <td>{{ booking.venue_id }}</td>
                 <td>{{ booking.start_time }}</td>
                 <td>{{ booking.end_time }}</td>
+                <td><a href="booking.html" class="button">Details</a></td>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

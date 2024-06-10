@@ -1,169 +1,17 @@
-<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Details</title>
-    <style>
-        body {
-            font-family: Georgia, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        table {
-            width: 50%;
-            background-color: #fff;
-            border-collapse: collapse;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
-</head>
-<body>
-    <table>
-        <thead>
-            <tr>
-                <th>Field</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Username</td>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <td>First Name</td>
-                <td>{{ user.first_name }}</td>
-            </tr>
-            <tr>
-                <td>Last Name</td>
-                <td>{{ user.last_name }}</td>
-            </tr>
-            <tr>
-                <td>Phone Number</td>
-                <td>{{ user.phone_number }}</td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-</html>
--->
-<!-- Dos botones, uno nos direcciona a advertisments y otro nos direcciona a bookings-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Navigation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            border: none;
-            outline: none;
-        }
-
-            .button:hover {
-                background-color: #45a049;
-            }
-    </style>
+    <title>General</title>
+    <link rel="stylesheet" type="text/css" href="../../static/style.css">
 </head>
 <body>
     <div class="container">
         <a href="advertisements.html" class="button">View Advertisements</a>
         <a href="bookings.html" class="button">View Bookings</a>
+        <a href="profile.html" class="button">Your profile</a>
     </div>
 </body>
 </html>
 
-<!--
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<table>
-    <thead>
-    <tr>
-        <th>Field</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>username</td>
-        <td>{{ user.username }}</td>
-    </tr>
-    <tr>
-        <td>email</td>
-        <td>{{ user.email }}</td>
-    </tr>
-    <tr>
-        <td>first name</td>
-        <td>{{ user.first_name }}</td>
-    </tr>
-    <tr>
-        <td>last name</td>
-        <td>{{ user.last_name }}</td>
-    </tr>
-    <tr>
-        <td>phone number</td>
-        <td>{{ user.phone_number }}</td>
-    </tr>
-    </tbody>
-</table>
-</body>
-</html>
-    -->
+
