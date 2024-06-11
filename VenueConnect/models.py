@@ -88,16 +88,17 @@ class User(AbstractUser):
         email.send()
 
     def make_booking(self, venue: 'Venue', time: TimeRange):
-        if venue.checkAvailability(time):
+        if venue.check_availability(time):
             self.booking_order = BookingOrder()
             self.booking_order.user = self
             self.booking_order.start_time = time.start_time
             self.booking_order.end_time = time.end_time
             self.booking_order.venue = venue
-            self.booking_order.price = venue.reserveVenue(time.start_time, time.end_time)
+            self.booking_order.price = venue.reserve_venue(time.start_time, time.end_time)
             self.booking_order.save()
+            return True
         else:
-            return 0
+            return False
 
     def cancel_booking(self):
         self.booking_order.delete()
@@ -106,21 +107,23 @@ class User(AbstractUser):
         return Venue.objects.filter(capacity=requested_capacity, address=requested_address)
 
     def rate_venue(self, chosen_venue: 'Venue', description: str, feedback: int):
-        if 10 < feedback < 0:
-            return 0
+        if feedback not in range(1, 11):
+            return False
         review = Review()
         review.venue = chosen_venue
         review.author = self
         review.review = description
         review.feedback = feedback
         review.save()
+        return True
 
     def message_user(self, subject: str, receiver_email: str, message: str):
-        if 5000 < len(message) < 200 and 50 < len(subject) < 1:
-            return 0
+        if len(message) not in range(200, 5001) or len(subject) not in range(1, 51):
+            return False
         email = EmailMessage(subject, message, from_email=self.email, to=receiver_email)
         email.content_subtype = 'html'
         email.send()
+        return True
 
 
 class VenueType(models.TextChoices):
@@ -132,10 +135,10 @@ class VenueType(models.TextChoices):
 
 
 class Venue(models.Model):
-    venueName = models.CharField(max_length=100)
+    venue_name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     price_per_day = models.IntegerField(default=0)
-    venueType = models.CharField(
+    venue_type = models.CharField(
         max_length=2,
         choices=VenueType.choices,
         default=VenueType.CONCERT_HALL,
@@ -149,29 +152,29 @@ class Venue(models.Model):
     )
     availabilityCalendar = Calendar()
 
-    def checkAvailability(self, time):
+    def check_availability(self, time):
         return self.availabilityCalendar.check_availability(time)
 
-    def reserveVenue(self, start_time, end_time):
+    def reserve_venue(self, start_time, end_time):
         days = self.availabilityCalendar.reserve(start_time, end_time)
         self.save()
         return days * self.price_per_day
 
-    def removeVenue(self):
+    def remove_venue(self):
         self.delete()
 
-    def updateVenueDetails(self, *,
-                           venueName=None,
-                           address=None,
-                           venueType=None,
-                           capacity=None,
-                           owner=None):
-        if venueName is not None:
-            self.venueName = venueName
+    def update_venue_details(self, *,
+                             venue_name=None,
+                             address=None,
+                             venue_type=None,
+                             capacity=None,
+                             owner=None):
+        if venue_name is not None:
+            self.venue_name = venue_name
         if address is not None:
             self.address = address
-        if venueType is not None:
-            self.venueType = venueType
+        if venue_type is not None:
+            self.venue_type = venue_type
         if capacity is not None:
             self.capacity = int(capacity)
         if owner is not None:
@@ -203,5 +206,3 @@ class Advertisement(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='advertisement')
     is_active = models.BooleanField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='advertisement')
-
-

@@ -11,36 +11,39 @@ from rest_framework.views import APIView
 from django.contrib.sites.shortcuts import get_current_site
 from .forms import RegisterForm
 from .forms import NameAuthForm
-from .models import User, Advertisement, BookingOrder
+from .models import User, Advertisement, BookingOrder, Venue
 from .utils import email_verification_token
 
 
-
-def hoeme_view(request):
+def home_view(request):
     return render(request, 'home.html')
+
 
 def register(request):
     return render(request, 'register.html')
 
+
 def index(request):
     return render(request, 'index.html')
 
+
 def not_found_view(request):
     return render(request, '404.html')
+
 
 def verify_email_confirm(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, ObjectDoesNotExist):
         user = None
     if user is not None and email_verification_token.check_token(user, token):
         user.email_verified = True
         user.save()
         messages.success(request, 'Your email has been verified.')
         return redirect('/')
-    else:
-        messages.warning(request, 'The link is invalid.')
+
+    messages.warning(request, 'The link is invalid.')
     return render(request, 'verify_email_confirm.html')
 
 
@@ -67,8 +70,7 @@ class RegisterView(APIView):
                 login(request, user, backend='VenueConnect.backend.NameAuthenticationBackend')
                 if next:
                     return redirect(next)
-                else:
-                    return redirect('/')
+                return redirect('/')
         return render(request, 'register.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -91,7 +93,7 @@ class LoginView(APIView):
         return render(request, 'login.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def logout_view(self, request, **kwargs):
+def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
         return redirect('/', status=status.HTTP_200_OK)
@@ -157,7 +159,6 @@ class ProfileView(APIView):
     def get(request, uid):
         try:
             user = User.objects.get(pk=uid)
-            booked_venue = Venue.objects.filter()
-            return render(request, 'booking.html', {'booking': booking})
+            # TODO fill in
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)

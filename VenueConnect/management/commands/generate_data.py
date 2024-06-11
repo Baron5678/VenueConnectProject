@@ -36,11 +36,11 @@ class Command(BaseCommand):
 
         for _ in range(5):
             models.Venue.objects.create(
-                venueName=faker.name(),
+                venue_name=faker.name(),
                 address=faker.address(),
                 capacity=faker.random_int(),
                 owner=random.choice(models.User.objects.all()),
-                venueType=random.choice([choice[0] for choice in models.VenueType])
+                venue_type=random.choice([choice[0] for choice in models.VenueType])
             )
 
         for _ in range(4):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-import VenueConnect.validators as validators
+from VenueConnect import validators
 
 
 class UserRegistrationSerializer(serializers.Serializer):

@@ -22,7 +22,7 @@ from VenueConnect import views
 
 urlpatterns = [
     re_path(r'^(?P<url>.+)\.html$', RedirectView.as_view(url='/%(url)s', permanent=True)),
-    path('', views.hoeme_view, name='home'),
+    path('', views.home_view, name='home'),
     path('register.html/', views.register, name='register'),
     path('admin/', admin.site.urls),
     path('auth/register/', views.RegisterView.as_view(), name='register'),
