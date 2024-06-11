@@ -55,6 +55,8 @@ class NameAuthForm(AuthenticationForm):
     first_name = forms.CharField(max_length=255)
     last_name = forms.CharField(max_length=255)
 
+    field_order = ['first_name', 'last_name', 'password']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Remove username field if you are not using it
