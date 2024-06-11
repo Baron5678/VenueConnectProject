@@ -74,6 +74,8 @@ class RegisterView(APIView):
 class LoginView(APIView):
     @staticmethod
     def get(request, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(f'/users/{request.user.pk}')
         form = NameAuthForm()
         return render(request, 'login.html', {'form': form}, **kwargs)
 
@@ -82,10 +84,9 @@ class LoginView(APIView):
         form = NameAuthForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            if user is not None:
-                if form.is_valid():
-                    login(request, user, backend='VenueConnect.backend.NameAuthenticationBackend')
-                return redirect('/', status.HTTP_200_OK)
+            if user is not None and form.is_valid():
+                login(request, user, backend='VenueConnect.backend.NameAuthenticationBackend')
+                return redirect(f'/users/{user.pk}/', status.HTTP_200_OK)
             return redirect('/', status.HTTP_401_UNAUTHORIZED)
         return render(request, 'login.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -111,14 +112,11 @@ class UsersView(APIView):
 class AdvertisementsView(APIView):
     @staticmethod
     def get(request, userid):
-        try:
-            user = User.objects.get(pk=userid)
-            advertisements = Advertisement.objects.filter(owner=user)
-            if not advertisements:
-                return redirect('/404', status=status.HTTP_404_NOT_FOUND)
-            return render(request, 'advertisements.html', {'advertisements': advertisements})
-        except ObjectDoesNotExist:
+        user = User.objects.get(pk=userid)
+        advertisements = Advertisement.objects.filter(owner=user)
+        if not advertisements:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+        return render(request, 'advertisements.html', {'advertisements': advertisements})
 
 
 class AdvertisementView(APIView):
@@ -134,11 +132,10 @@ class AdvertisementView(APIView):
 class BookingsView(APIView):
     @staticmethod
     def get(request, userid):
-        try:
-            bookings = BookingOrder.objects.filter(user_id=userid).all()
-            return render(request, 'bookings.html', {'bookings': bookings})
-        except ObjectDoesNotExist:
+        bookings = BookingOrder.objects.filter(user_id=userid)
+        if not bookings:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+        return render(request, 'bookings.html', {'bookings': bookings})
 
 
 class BookingView(APIView):
