@@ -22,7 +22,7 @@
                 <td>{{ booking.venue_id }}</td>
                 <td>{{ booking.start_time }}</td>
                 <td>{{ booking.end_time }}</td>
-                <td><a href="booking.html" class="button">Details</a></td>
+                <td><a href="{{ booking.id }}" class="button">Details</a></td>
             </tr>
         {% endfor %}
         </tbody>
