@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect
@@ -8,10 +9,10 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.views import APIView
-from django.contrib.sites.shortcuts import get_current_site
-from .forms import RegisterForm
+
 from .forms import NameAuthForm
-from .models import User, Advertisement, BookingOrder, Venue
+from .forms import RegisterForm
+from .models import User, Advertisement, BookingOrder
 from .utils import email_verification_token
 
 
@@ -21,10 +22,6 @@ def home_view(request):
 
 def register(request):
     return render(request, 'register.html')
-
-
-def index(request):
-    return render(request, 'index.html')
 
 
 def not_found_view(request):

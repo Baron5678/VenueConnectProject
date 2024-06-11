@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" type="text/css" href="../../static/style.css">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
     <div class="container">
         <h1>Venue Connect</h1>
         <a href="{% url 'login' %}" class="button">Start</a>
     </div>
-</body>
-</html>
+{% endblock %}

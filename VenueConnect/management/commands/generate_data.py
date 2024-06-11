@@ -1,10 +1,8 @@
 import random
 
-from django.core.management.base import BaseCommand
 from django.core.management import call_command
+from django.core.management.base import BaseCommand
 from django.utils import timezone
-from django.db import connections
-from django.db.migrations.executor import MigrationExecutor
 from faker import Faker
 
 import VenueConnect.models as models

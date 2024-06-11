@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.db import models
 
 
 class TimeRange:
@@ -33,7 +33,7 @@ class Calendar:
 class TokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
         return (
-            str(user.pk) + str(timestamp) + str(user.email_verified)
+                str(user.pk) + str(timestamp) + str(user.email_verified)
         )
 
 

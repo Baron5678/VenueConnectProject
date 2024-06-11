@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>General</title>
-    <link rel="stylesheet" type="text/css" href="../../static/style.css">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    General
+{% endblock %}
+
+{% block content %}
     <div class="container">
         <a href="advertisements.html" class="button">View Advertisements</a>
         <a href="bookings.html" class="button">View Bookings</a>
         <a href="profile.html" class="button">Your profile</a>
     </div>
-</body>
-</html>
+{% endblock %}
 
 

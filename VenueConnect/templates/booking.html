@@ -1,36 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Booking</title>
-    <link rel="stylesheet" type="text/css" href="../../static/style.css">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    Booking
+{% endblock %}
+
+{% block content %}
     <table>
         <thead>
-            <tr>
-                <th>Booking</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>Booking</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Reservation</td>
-                <td>{{ booking.id }}</td>
-            </tr>
-            <tr>
-                <td>Venue ID</td>
-                <td>{{ booking.venue_id }}</td>
-            </tr>
-            <tr>
-                <td>Start time</td>
-                <td>{{ booking.start_time }}</td>
-            </tr>
-            <tr>
-                <td>End time</td>
-                <td>{{ booking.end_time }}</td>
-            </tr>
+        <tr>
+            <td>Reservation</td>
+            <td>{{ booking.id }}</td>
+        </tr>
+        <tr>
+            <td>Venue ID</td>
+            <td>{{ booking.venue_id }}</td>
+        </tr>
+        <tr>
+            <td>Start time</td>
+            <td>{{ booking.start_time }}</td>
+        </tr>
+        <tr>
+            <td>End time</td>
+            <td>{{ booking.end_time }}</td>
+        </tr>
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

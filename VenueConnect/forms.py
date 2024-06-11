@@ -1,8 +1,8 @@
 from django import forms
-from django.core.validators import EmailValidator
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
+from django.core.validators import EmailValidator
 
 from VenueConnect import validators
 from .models import User

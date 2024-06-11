@@ -1,23 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Advertisements</title>
-    <link rel="stylesheet" type="text/css" href="../../static/style.css">
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    Advertisements
+{% endblock %}
+
+{% block content %}
     <table>
         <thead>
-            <tr>
-                <th>Advertisement</th>
-                <th>Owner ID</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>Advertisement</th>
+            <th>Owner ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
-            {% for ad in advertisements %}
+        {% for ad in advertisements %}
             <tr>
                 <td>{{ ad.id }}</td>
                 <td>{{ ad.owner_id }}</td>
@@ -27,8 +26,7 @@
                     <a href="advertisement.html" class="button">Details</a>
                 </td>
             </tr>
-            {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}
