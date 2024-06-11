@@ -25,6 +25,8 @@ class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        del self.fields['usable_password']
+
         # Example: adding a regex validator to the username
         self.fields['first_name'].validators.append(
             validators.username_validator
