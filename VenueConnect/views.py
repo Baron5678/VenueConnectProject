@@ -156,9 +156,9 @@ class BookingView(APIView):
 
 class ProfileView(APIView):
     @staticmethod
-    def get(request, uid):
+    def get(request, userid):
         try:
-            user = User.objects.get(pk=uid)
-            # TODO fill in
+            user = User.objects.get(pk=userid)
+            return render(request, 'profile.html', {'user': user})
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
