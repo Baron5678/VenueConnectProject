@@ -8,7 +8,6 @@ class NameAuthenticationBackend(ModelBackend):
         user_model = get_user_model()
         try:
             user = user_model.objects.get(Q(first_name=first_name), Q(last_name=last_name))
-            if user.check_password(password):
-                return user
+            return user if user.check_password(password) else None
         except user_model.DoesNotExist:
             return None
