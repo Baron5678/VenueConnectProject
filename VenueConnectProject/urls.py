@@ -35,6 +35,7 @@ urlpatterns = [
     path('users/<userid>/bookings/', views.BookingsView.as_view(), name='bookings'),
     path('users/<userid>/bookings/<booking_id>', views.BookingView.as_view(), name='booking'),
     path('users/<userid>/advertisements/<ad_id>/', views.AdvertisementView.as_view(), name='advertisement'),
+    path('search/', views.SearchView.as_view(), name='search'),
     path('404', views.not_found_view, name='not_found'),
    # path('create-venue/', views.create_venue, name='create_venue'),
 ]

@@ -38,7 +38,8 @@ class Command(BaseCommand):
                 address=faker.address(),
                 capacity=faker.random_int(),
                 owner=random.choice(models.User.objects.all()),
-                venue_type=random.choice([choice[0] for choice in models.VenueType])
+                venue_type=random.choice([choice for choice in models.VenueType]),
+                price_per_day=random.randint(100, 10000)
             )
 
         for _ in range(4):

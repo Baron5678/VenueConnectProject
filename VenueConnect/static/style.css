@@ -39,6 +39,7 @@
     transition: background-color 0.3s;
     border: none;
     outline: none;
+    min-width: fit-content;
 }
 
 header {
@@ -59,7 +60,6 @@ header {
 .button:hover {
     background-color: #0056b3;
 }
-
 
 table {
     background-color: #fff;
@@ -124,6 +124,10 @@ form button {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+button {
+    min-width: fit-content;
 }
 
 form button:hover {

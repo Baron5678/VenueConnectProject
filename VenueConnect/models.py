@@ -155,6 +155,9 @@ class Venue(models.Model):
     def check_availability(self, time):
         return self.availabilityCalendar.check_availability(time)
 
+    def check_availability(self, start_time, end_time):
+        return self.availabilityCalendar.check_availability(start_time, end_time)
+
     def reserve_venue(self, start_time, end_time):
         days = self.availabilityCalendar.reserve(start_time, end_time)
         self.save()
@@ -206,3 +209,37 @@ class Advertisement(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='advertisement')
     is_active = models.BooleanField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='advertisement')
+
+    @staticmethod
+    def filter(
+            venue_type=None,
+            min_price=None,
+            max_price=None,
+            min_capacity=None,
+            max_capacity=None,
+            available_from=None,
+            available_to=None
+    ):
+        ads = Advertisement.objects.filter(is_active=True)
+        return_ads = []
+        for ad in ads:
+            v = ad.venue
+            if venue_type and v.venue_type != venue_type:
+                continue
+            if min_price and v.price_per_day < min_price:
+                continue
+            if max_price and v.price_per_day > max_price:
+                continue
+            if min_capacity and v.capacity < min_capacity:
+                continue
+            if max_capacity and v.capacity > max_capacity:
+                continue
+            if available_from and available_to and not v.check_available(available_from, available_from, available_to):
+                continue
+            if available_to and not v.check_available(available_from):
+                continue
+            if available_to and not v.check_available(available_to):
+                continue
+            return_ads.append(ad)
+
+        return return_ads

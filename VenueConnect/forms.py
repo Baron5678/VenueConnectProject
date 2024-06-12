@@ -5,7 +5,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import EmailValidator
 
 from VenueConnect import validators
-from .models import User
+from .models import User, VenueType
+
+
+class SearchForm(forms.Form):
+    venue_type = forms.ChoiceField(choices=VenueType.choices)
+    min_price = forms.IntegerField(required=False)
+    max_price = forms.IntegerField(required=False)
+    min_capacity = forms.IntegerField(required=False)
+    max_capacity = forms.IntegerField(required=False)
+    available_from = forms.DateField(required=False)
+    available_to = forms.DateField(required=False)
 
 
 class RegisterForm(UserCreationForm):
