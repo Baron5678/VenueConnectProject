@@ -48,6 +48,8 @@
             </tr>
             </tbody>
         </table>
-        <a class="button">Book</a>
+        {% if request.user.pk != ad.owner_id %}
+            <a class="button">Book</a>
+        {% endif %}
     </form>
 {% endblock %}
