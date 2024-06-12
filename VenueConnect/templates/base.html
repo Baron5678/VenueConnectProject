@@ -12,6 +12,7 @@
         <a class="button" href="/users/{{ request.user.pk }}">{{ request.user.username }}</a>
         <a class="button" href="{% url 'logout' %}">Log Out</a>
     {% else %}
+        <a class="button" href="{% url 'home' %}">Home</a>
         <a class="button" href="{% url 'login' %}">Log In</a>
     {% endif %}
 </header>
