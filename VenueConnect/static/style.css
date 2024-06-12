@@ -33,7 +33,7 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 20px;
+    margin: 15px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -56,15 +56,12 @@ header {
     z-index: 1000; /* Ensure it's above other content */
 }
 
-header >
-
 .button:hover {
     background-color: #0056b3;
 }
 
 
 table {
-    width: 50%;
     background-color: #fff;
     border-collapse: collapse;
     border-radius: 8px;
@@ -76,6 +73,8 @@ th, td {
     padding: 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    max-width: 300px;
+
 }
 
 th {
