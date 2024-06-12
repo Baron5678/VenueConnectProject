@@ -189,24 +189,25 @@ class MakeBookingView(APIView):
     @staticmethod
     def get(request, userid, ad_id, venue_id):
         form = BookingForm()
-        venue = Venue.objects.get(pk=venue_id)
-        return render(request, 'make_booking.html', {
-            'booking_form': form,
-            'venue': venue
-        })
-
-    @staticmethod
-    def post(request, userid, ad_id, venue_id):
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            request.user.make_booking(
-                Venue.objects.get(pk=venue_id),
-                TimeRange(form.cleaned_data['start_time'], form.cleaned_data['end_time']))
-            return redirect('bookings', userid=userid)
-        else:
-            venue = get_object_or_404(Venue, id=venue_id)
+        try:
+            venue = Venue.objects.get(pk=venue_id)
             return render(request, 'make_booking.html', {
                 'booking_form': form,
                 'venue': venue
             })
+        except ObjectDoesNotExist:
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+    @staticmethod
+    def post(request, venue_id):
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            try:
+                venue = Venue.objects.get(pk=venue_id)
+                request.user.make_booking(venue, TimeRange(form.cleaned_data['start_time'],
+                                                           form.cleaned_data['end_time']))
+                return redirect('bookings', userid=request.user.id)
+            except ObjectDoesNotExist:
+                return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
 
