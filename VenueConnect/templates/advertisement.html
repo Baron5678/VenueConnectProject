@@ -48,6 +48,9 @@
             </tr>
             </tbody>
         </table>
-        <a class="button" href="{% url 'make_booking' userid=ad.owner_id ad_id=ad.id venue_id=ad.venue_id %}">Book</a>
+        <a class="button">Book</a>
+        {% if request.user.pk != ad.owner_id %}
+            <a class="button" href="{% url 'make_booking' userid=request.user.pk ad_id=ad.id venue_id=ad.venue_id %}">Book</a>
+        {% endif %}
     </form>
 {% endblock %}
