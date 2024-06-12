@@ -48,6 +48,6 @@
             </tr>
             </tbody>
         </table>
-        <a class="button" href="{% url 'make_booking' userid=user ad_id=ad.id venue_id=ad.venue_id %}">Book</a>
+        <a class="button" href="{% url 'make_booking' userid=ad.owner_id ad_id=ad.id venue_id=ad.venue_id %}">Book</a>
     </form>
 {% endblock %}

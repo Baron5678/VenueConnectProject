@@ -88,7 +88,7 @@ class User(AbstractUser):
         email.send()
 
     def make_booking(self, venue: 'Venue', time: TimeRange):
-        if venue.check_availability(time):
+        if venue.check_availability(time.start_time,time.end_time):
             booking_order = BookingOrder(
                 user=self,
                 start_time=time.start_time,
