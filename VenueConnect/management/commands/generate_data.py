@@ -11,10 +11,10 @@ import VenueConnect.models as models
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # recreate the database
-        self.stdout.write('Resetting the database')
-        call_command('flush', '--no-input', verbosity=0)
-        call_command('makemigrations', verbosity=0)
-        call_command('migrate', verbosity=0)
+        # self.stdout.write('Resetting the database')
+        # call_command('flush', '--no-input', verbosity=0)
+        # call_command('makemigrations', verbosity=0)
+        # call_command('migrate', verbosity=0)
         self.stdout.write('Creating admin user. Username: admin Password: admin')
         models.User.objects.create_superuser('admin', 'admin@admin', 'admin')
         self.stdout.write('Creating normal user John Doe. Username: user1 Password: password')

@@ -3,17 +3,16 @@ from django.contrib.auth import login, logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.shortcuts import render
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.views import APIView
-
-from .forms import NameAuthForm
+from .forms import NameAuthForm, BookingForm
 from .forms import RegisterForm
-from .models import User, Advertisement, BookingOrder
-from .utils import email_verification_token
+from .models import User, Advertisement, BookingOrder, Venue
+from .utils import email_verification_token, TimeRange
 
 
 def home_view(request):
@@ -156,3 +155,30 @@ class ProfileView(APIView):
             return render(request, 'profile.html', {'user': user})
         except ObjectDoesNotExist:
             return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+
+
+class MakeBookingView(APIView):
+    @staticmethod
+    def get(request, userid, ad_id, venue_id):
+        form = BookingForm()
+        venue = Venue.objects.get(pk=venue_id)
+        return render(request, 'make_booking.html', {
+            'booking_form': form,
+            'venue': venue
+        })
+
+    @staticmethod
+    def post(request, userid, ad_id, venue_id):
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            request.user.make_booking(
+                Venue.objects.get(pk=venue_id),
+                TimeRange(form.cleaned_data['start_time'], form.cleaned_data['end_time']))
+            return redirect('bookings', userid=userid)
+        else:
+            venue = get_object_or_404(Venue, id=venue_id)
+            return render(request, 'make_booking.html', {
+                'booking_form': form,
+                'venue': venue
+            })
+

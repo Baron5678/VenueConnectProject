@@ -89,13 +89,14 @@ class User(AbstractUser):
 
     def make_booking(self, venue: 'Venue', time: TimeRange):
         if venue.check_availability(time):
-            self.booking_order = BookingOrder()
-            self.booking_order.user = self
-            self.booking_order.start_time = time.start_time
-            self.booking_order.end_time = time.end_time
-            self.booking_order.venue = venue
-            self.booking_order.price = venue.reserve_venue(time.start_time, time.end_time)
-            self.booking_order.save()
+            booking_order = BookingOrder(
+                user=self,
+                start_time=time.start_time,
+                end_time=time.end_time,
+                venue=venue,
+                price=venue.reserve_venue(time.start_time, time.end_time)
+            )
+            booking_order.save()
             return True
         else:
             return False

@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import EmailValidator
 
 from VenueConnect import validators
-from .models import User
+from .models import User, BookingOrder
 
 
 class RegisterForm(UserCreationForm):
@@ -77,3 +77,13 @@ class NameAuthForm(AuthenticationForm):
             self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
+
+
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = BookingOrder
+        fields = ['start_time', 'end_time']
+        widgets = {
+            'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'end_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
