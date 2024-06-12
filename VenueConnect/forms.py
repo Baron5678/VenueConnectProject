@@ -12,15 +12,13 @@ class RegisterForm(UserCreationForm):
     email = forms.EmailField(validators=[EmailValidator()])  # Custom defined email field
     username = forms.CharField(max_length=150)
 
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = User
         fields = ["first_name",
                   "last_name",
                   "username",
                   "email",
-                  "phone_number",
-                  "password1",
-                  "password2"]
+                  "phone_number"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -42,14 +40,6 @@ class RegisterForm(UserCreationForm):
 
         self.fields['phone_number'].validators.append(
             validators.phone_validator
-        )
-
-        self.fields['password1'].validators.append(
-            validators.password_validator
-        )
-
-        self.fields['password2'].validators.append(
-            validators.password_validator
         )
 
 

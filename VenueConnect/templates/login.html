@@ -7,19 +7,7 @@
 {% block content %}
     <form class="form" method="post">
         {% csrf_token %}
-        {% for field in form %}
-            <div>
-                {{ field.label_tag }}
-                {{ field }}
-                {% if field.errors %}
-                    <ul>
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-        {% endfor %}
+        {{ form.as_div }}
         <button type="submit">Sign In</button>
         <!--  <a href="users.html" class="button">Sign In</a> -->
         <div class="donthaveaccount">

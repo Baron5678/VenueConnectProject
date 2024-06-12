@@ -45,6 +45,7 @@ def verify_email_confirm(request, uidb64, token):
 
 
 class RegisterView(APIView):
+    form_class = RegisterForm
     @staticmethod
     def get(request, **kwargs):
         form = RegisterForm()
@@ -53,7 +54,7 @@ class RegisterView(APIView):
     @staticmethod
     def post(request):
         next = request.GET.get('next')
-        form = RegisterForm(request.POST)
+        form = RegisterForm(data=request.POST)
         if form.is_valid():
             user = form.save()
             request_scheme = 'https' if request.is_secure() else 'http'
