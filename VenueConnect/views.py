@@ -10,6 +10,7 @@ from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.views import APIView
 from .forms import NameAuthForm, BookingForm
+from .forms import NameAuthForm, SearchForm
 from .forms import RegisterForm
 from .models import User, Advertisement, BookingOrder, Venue
 from .utils import email_verification_token, TimeRange
@@ -44,6 +45,8 @@ def verify_email_confirm(request, uidb64, token):
 
 
 class RegisterView(APIView):
+    form_class = RegisterForm
+
     @staticmethod
     def get(request, **kwargs):
         form = RegisterForm()
@@ -52,7 +55,7 @@ class RegisterView(APIView):
     @staticmethod
     def post(request):
         next = request.GET.get('next')
-        form = RegisterForm(request.POST)
+        form = RegisterForm(data=request.POST)
         if form.is_valid():
             user = form.save()
             request_scheme = 'https' if request.is_secure() else 'http'
@@ -88,6 +91,31 @@ class LoginView(APIView):
                 return redirect(f'/users/{user.pk}/', status.HTTP_200_OK)
             return redirect('/', status.HTTP_401_UNAUTHORIZED)
         return render(request, 'login.html', {'form': form}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SearchView(APIView):
+    @staticmethod
+    def get(request, **kwargs):
+        form = SearchForm()
+        return render(request, 'search.html', {'form': form}, **kwargs)
+
+    @staticmethod
+    def post(request):
+        form = SearchForm(data=request.POST)
+        if form.is_valid():
+            ads = Advertisement.filter(
+                venue_type=form.cleaned_data['venue_type'],
+                min_price=form.cleaned_data['min_price'],
+                max_price=form.cleaned_data['max_price'],
+                min_capacity=form.cleaned_data['min_capacity'],
+                max_capacity=form.cleaned_data['max_capacity'],
+                available_from=form.cleaned_data['available_from'],
+                available_to=form.cleaned_data['available_to']
+            )
+            if ads:
+                return render(request, 'advertisements.html', context={'advertisements': ads})
+            return redirect('/404', status=status.HTTP_404_NOT_FOUND)
+        return render(request, 'search.html', {'form': form})
 
 
 def logout_view(request):

@@ -29,6 +29,14 @@ class Calendar:
 
         return True
 
+    def check_availability(self, time_start, time_end):
+        tr = TimeRange(time_start, time_end)
+        for time_range in self.reserved_times:
+            if tr.includes(time_range.start_time) or tr.includes(time_range.end_time):
+                return False
+
+        return True
+
 
 class TokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
