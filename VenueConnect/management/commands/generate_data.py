@@ -22,7 +22,7 @@ class Command(BaseCommand):
 
         faker = Faker()
 
-        for _ in range(3):
+        for _ in range(2):
             models.User.register(
                 faker.user_name(),
                 faker.email(),
@@ -59,11 +59,15 @@ class Command(BaseCommand):
                 user=random.choice(models.User.objects.all())
             )
 
-        for _ in range(5):
-            models.Advertisement.objects.create(
-                title=faker.sentence(),
-                description=faker.text(),
-                owner=random.choice(models.User.objects.all()),
-                is_active=faker.boolean(),
-                venue=random.choice(models.Venue.objects.all())
-            )
+        for _ in range(10):
+            user = random.choice(models.User.objects.all())
+            venues = models.Venue.objects.filter(owner=user)
+            if venues:
+                venue = random.choice(venues)
+                models.Advertisement.objects.create(
+                    title=faker.sentence(),
+                    description=faker.text(),
+                    owner=user,
+                    is_active=faker.boolean(),
+                    venue=venue
+                )
